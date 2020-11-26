@@ -7,36 +7,31 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import sg.toru.coroutineflow.databinding.ActivityMainBinding
+import sg.toru.coroutineflow.datasource.MainDataSource
+import sg.toru.coroutineflow.repository.MainRepository
+import sg.toru.coroutineflow.usecase.MainUseCase
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityMainBinding
 
+    private val mainUseCase:MainUseCase by lazy {
+        MainUseCase(MainRepository(MainDataSource()))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        test()
+        observeMainFlow()
     }
 
-    private val testFlow =  flow {
-        for (i in 1..6){
-            emit(i.toString())
-//            delay(200)
-        }
-    }
-
-
-    private fun test() {
+    private fun observeMainFlow(){
         lifecycleScope.launch {
-            testFlow.flowOn(Dispatchers.IO)
-                    .onEach {
-                        delay(200L)
-                        Log.e("Toru", it)
-                        val prev = binding.txtCenter.text
-                        binding.txtCenter.text = "$prev\n$it"
-                    }
-                    .launchIn(CoroutineScope(Dispatchers.Main))
+            mainUseCase.getData().collect{
+                val prev = binding.txtCenter.text
+                binding.txtCenter.text = "$prev\n$it"
+            }
         }
     }
 }

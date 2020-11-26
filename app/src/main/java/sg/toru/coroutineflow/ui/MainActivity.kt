@@ -1,8 +1,7 @@
-package sg.toru.coroutineflow
+package sg.toru.coroutineflow.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -10,6 +9,7 @@ import sg.toru.coroutineflow.databinding.ActivityMainBinding
 import sg.toru.coroutineflow.datasource.MainDataSource
 import sg.toru.coroutineflow.repository.MainRepository
 import sg.toru.coroutineflow.usecase.MainUseCase
+import sg.toru.coroutineflow.util.onClick
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +24,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         observeMainFlow()
+        binding.btnFlow
+            .onClick()
+            .onEach {
+                mainUseCase.getData().collect{
+                    val prev = binding.txtCenter.text
+                    binding.txtCenter.text = "$prev\n$it"
+                }
+            }
+            .launchIn(lifecycleScope)
     }
 
     private fun observeMainFlow(){

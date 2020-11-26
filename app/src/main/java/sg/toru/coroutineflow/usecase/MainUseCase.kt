@@ -6,4 +6,6 @@ import sg.toru.coroutineflow.repository.MainRepository
 
 class MainUseCase(private val repository: MainRepository) {
     fun getData() = repository.getData()
+
+    fun requestData() = repository.fetchData()
 }

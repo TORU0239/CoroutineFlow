@@ -11,4 +11,7 @@ class MainRepository(private val dataSource: MainDataSource) {
             .filter { (it % 2) == 0 }
             .onEach { delay(200L) }
             .map { it.toString() }
+
+
+    fun fetchData(){}
 }

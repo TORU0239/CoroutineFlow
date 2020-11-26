@@ -5,7 +5,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import sg.toru.coroutineflow.datasource.MainDataSource
 
-class MainRepository(private val dataSource: MainDataSource) {
+class MainRepository() {
+    private val dataSource: MainDataSource = MainDataSource()
     fun getData() = dataSource.fetchData()
             .flowOn(Dispatchers.IO)
             .filter { (it % 2) == 0 }

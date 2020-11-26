@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding:ActivityMainBinding
 
     private val mainUseCase:MainUseCase by lazy {
-        MainUseCase(MainRepository(MainDataSource()))
+        MainUseCase()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

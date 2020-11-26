@@ -1,11 +1,8 @@
 package sg.toru.coroutineflow.usecase
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
 import sg.toru.coroutineflow.repository.MainRepository
 
-class MainUseCase(private val repository: MainRepository) {
+class MainUseCase() {
+    private val repository: MainRepository = MainRepository()
     fun getData() = repository.getData()
-
-    fun requestData() = repository.fetchData()
 }

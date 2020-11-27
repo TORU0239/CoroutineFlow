@@ -2,6 +2,7 @@ package sg.toru.coroutineflow.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -23,15 +24,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        observeMainFlow()
         binding.btnFlow
             .onClick()
             .onEach {
-                mainUseCase.getData().collect{
-                    val prev = binding.txtCenter.text
-                    binding.txtCenter.text = "$prev\n$it"
-                }
+                mainUseCase.getData()
+                        .cancellable()
+                        .onCompletion {
+                            Toast.makeText(this@MainActivity, "completed", Toast.LENGTH_SHORT).show()
+                        }
+                        .collect {
+                            val prev = binding.txtCenter.text
+                            binding.txtCenter.text = "$prev\n$it"
+                        }
             }
+
             .launchIn(lifecycleScope)
     }
 

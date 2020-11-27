@@ -10,3 +10,6 @@ fun View.onClick() = callbackFlow {
     }
     awaitClose{setOnClickListener(null)}
 }
+
+
+const val url = "https://jsonplaceholder.typicode.com/todos/"

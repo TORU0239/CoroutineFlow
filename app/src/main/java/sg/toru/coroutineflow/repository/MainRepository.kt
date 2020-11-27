@@ -3,9 +3,10 @@ package sg.toru.coroutineflow.repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 import sg.toru.coroutineflow.datasource.MainDataSource
 
-class MainRepository() {
+class MainRepository {
     private val dataSource: MainDataSource = MainDataSource()
     fun getData() = dataSource.fetchData()
             .flowOn(Dispatchers.IO)
@@ -14,5 +15,5 @@ class MainRepository() {
             .map { it.toString() }
 
 
-    fun fetchData(){}
+    suspend fun fetchInformation(index:Int = 1) = dataSource.fetchInformation(index)
 }

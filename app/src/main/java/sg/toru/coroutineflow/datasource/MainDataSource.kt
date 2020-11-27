@@ -2,6 +2,7 @@ package sg.toru.coroutineflow.datasource
 
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
+import sg.toru.coroutineflow.api.ApiModule
 
 /*
 * This class is to fetch data from local / remote.
@@ -15,4 +16,6 @@ class MainDataSource {
             emit(i)
         }
     }
+
+    suspend fun fetchInformation(index:Int = 1) = ApiModule.retrofit.create(MainService::class.java).getTest(index)
 }

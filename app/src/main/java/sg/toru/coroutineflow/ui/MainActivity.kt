@@ -2,6 +2,7 @@ package sg.toru.coroutineflow.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
@@ -24,6 +25,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        observeMainInformation()
+
         binding.btnFlow
             .onClick()
             .onEach {
@@ -47,6 +51,20 @@ class MainActivity : AppCompatActivity() {
                 val prev = binding.txtCenter.text
                 binding.txtCenter.text = "$prev\n$it"
             }
+        }
+    }
+
+    private fun observeMainInformation() {
+        lifecycleScope.launch {
+            mainUseCase.getInformation()
+                    .flowOn(Dispatchers.IO)
+                    .catch {
+                        Log.e("Toru", "exceptional case")
+                    }
+                    .collect { item ->
+                        binding.txtCenter.text = "${item.title} / ${item.userId}"
+                    }
+
         }
     }
 }

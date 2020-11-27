@@ -4,6 +4,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
+import retrofit2.Response
+import sg.toru.coroutineflow.data.NetworkResponse
+import sg.toru.coroutineflow.datasource.Item
 import sg.toru.coroutineflow.datasource.MainDataSource
 
 class MainRepository {
@@ -16,4 +19,8 @@ class MainRepository {
 
 
     suspend fun fetchInformation(index:Int = 1) = dataSource.fetchInformation(index)
+    suspend fun fetchInformation2(index:Int = 1) = object: NetworkResponse<Item>(){
+        override suspend fun fetchFromNetwork(): Response<Item> = dataSource.fetchInformation2(index)
+    }.asFlow()
+
 }

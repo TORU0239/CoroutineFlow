@@ -18,4 +18,5 @@ class MainDataSource {
     }
 
     suspend fun fetchInformation(index:Int = 1) = ApiModule.retrofit.create(MainService::class.java).getTest(index)
+    suspend fun fetchInformation2(index:Int = 1) = ApiModule.retrofit.create(MainService::class.java).getInformation(index)
 }

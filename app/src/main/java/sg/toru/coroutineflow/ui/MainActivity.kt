@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import retrofit2.Response
+import sg.toru.coroutineflow.data.Responses
 import sg.toru.coroutineflow.databinding.ActivityMainBinding
 import sg.toru.coroutineflow.datasource.MainDataSource
 import sg.toru.coroutineflow.repository.MainRepository
@@ -56,15 +58,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeMainInformation() {
         lifecycleScope.launch {
-            mainUseCase.getInformation()
-                    .flowOn(Dispatchers.IO)
-                    .catch {
+            mainUseCase.getInfo().collect {
+                when(it){
+                    is Responses.Success -> {
+                        binding.txtCenter.text = "${it.body.title} / ${it.body.userId}"
+                    }
+                    is Responses.Failure -> {
                         Log.e("Toru", "exceptional case")
                     }
-                    .collect { item ->
-                        binding.txtCenter.text = "${item.title} / ${item.userId}"
-                    }
-
+                }
+            }
         }
     }
 }

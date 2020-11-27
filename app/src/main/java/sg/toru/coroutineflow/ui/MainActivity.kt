@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeMainInformation() {
         lifecycleScope.launch {
-            mainUseCase.getInfo().collect {
+            mainUseCase.getInfo().onEach {
                 when(it){
                     is Responses.Success -> {
                         binding.txtCenter.text = "${it.body.title} / ${it.body.userId}"
@@ -66,8 +66,11 @@ class MainActivity : AppCompatActivity() {
                     is Responses.Failure -> {
                         Log.e("Toru", "exceptional case")
                     }
+                    is Responses.Exception -> {
+                        Toast.makeText(this@MainActivity, it.exception, Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+            }.launchIn(lifecycleScope)
         }
     }
 }
